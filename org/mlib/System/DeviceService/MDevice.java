@@ -18,7 +18,7 @@ public class MDevice {
         this.windowManager = activity.getWindowManager();
 
         this.resolution = new Point();
-        this.windowManager.getDefaultDisplay().getSize(this.resolution);
+        this.windowManager.getDefaultDisplay().getRealSize(this.resolution);
 
         ActivityManager manager = (ActivityManager) activity
                 .getSystemService(Context.ACTIVITY_SERVICE);

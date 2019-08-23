@@ -7,11 +7,13 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import org.mlib.System.DeviceService.MDevice;
 import org.mlib.System.Exception.MException;
+import org.mlib.System.Thread.MRunnable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.Vector;
 
 public class MBluetooth {
     private BluetoothAdapter adapter;
@@ -103,10 +105,16 @@ public class MBluetooth {
     }
 
     public BluetoothSocket listen() {
+        if (!checkAddress())
+            return null;
+
         return listen(this.activeAddress);
     }
 
     public BluetoothSocket listen(int timeout) {
+        if (!checkAddress())
+            return null;
+
         return listen(this.activeAddress, timeout);
     }
 
@@ -118,7 +126,9 @@ public class MBluetooth {
         if (!isOn() || !checkDevice(address))
             return null;
 
-        disconnect();
+        if (isReady())
+            disconnect();
+
         stopDiscovery();
 
         try {
@@ -131,8 +141,7 @@ public class MBluetooth {
             else
                 socket = serverSocket.accept();
 
-            this.socket = socket;
-            return socket;
+            return this.socket = socket;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -140,6 +149,9 @@ public class MBluetooth {
     }
 
     public BluetoothSocket connect() {
+        if (!checkAddress())
+            return null;
+
         return connect(this.activeAddress);
     }
 
@@ -157,12 +169,41 @@ public class MBluetooth {
                     device.createInsecureRfcommSocketToServiceRecord(this.uuid);
             socket.connect();
 
-            this.socket = socket;
-            return socket;
+            return this.socket = socket;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void autoConnection() {
+        autoConnection(this.activeAddress);
+    }
+
+    public void autoConnection(String address) {
+        Vector<Object> data = new Vector<>();
+        data.add(address);
+
+        MRunnable
+                listenThread = new MRunnable(data) {
+                    @Override
+                    public void run() {
+                        String address = (String) this.data.get(0);
+                        while (socket == null && isOn())
+                            listen(address, 3);
+                    }
+                },
+                connectThread = new MRunnable(data) {
+                    @Override
+                    public void run() {
+                        String address = (String) this.data.get(0);
+                        while (socket == null && isOn())
+                            connect(address);
+                    }
+                };
+
+        new Thread(listenThread).run();
+        new Thread(connectThread).run();
     }
 
     public void disconnect() {

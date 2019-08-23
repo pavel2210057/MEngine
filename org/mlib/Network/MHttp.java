@@ -1,7 +1,6 @@
 package org.mlib.Network;
 
 import android.util.Range;
-
 import org.mlib.System.Exception.MException;
 import org.mlib.System.Thread.MRunnable;
 import java.io.IOException;
@@ -65,18 +64,13 @@ public class MHttp {
         if (!checkURLConnection())
             return;
 
-        Vector<Object> data = new Vector<>();
-        data.add(this.connection);
-        data.add(this.responses);
-        data.add(this.listener);
-
-        MRunnable handler = new MRunnable(data) {
+        MRunnable handler = new MRunnable(null) {
             @Override
             public void run() {
                 StringBuilder builder = new StringBuilder();
 
                 try {
-                    InputStream stream = ((URLConnection) this.data.get(0)).getInputStream();
+                    InputStream stream = connection.getInputStream();
                     int bufferSize = 1024, byteCount;
                     byte[] buffer = new byte[bufferSize];
 
@@ -86,7 +80,7 @@ public class MHttp {
                     } while (byteCount == bufferSize);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    ((MNetworkListener)this.data.get(2)).onFailed(e.getMessage());
+                    listener.onFailed(e.getMessage());
                 }
 
                 int nullChar = builder.indexOf("\0");
@@ -96,8 +90,8 @@ public class MHttp {
                 else
                     response = builder.toString();
 
-                ((Vector<String>) this.data.get(1)).add(response);
-                ((MNetworkListener) this.data.get(2)).onSuccess(response);
+                responses.add(response);
+                listener.onSuccess(response);
             }
         };
 

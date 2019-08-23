@@ -17,9 +17,25 @@ public class MVec2 {
         this(point.x, point.y);
     }
 
+    public MVec2(Point begin, Point end) {
+        this(end.x - begin.x, end.y - begin.y);
+    }
+
+    public MVec2(MVec2 begin, MVec2 end) {
+        this(end.x - begin.x, end.y - begin.y);
+    }
+
     public MVec2(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+
+    public float getLengthSquare() {
+        return x * x + y * y;
+    }
+
+    public float getLength() {
+        return (float) Math.sqrt(getLengthSquare());
     }
 
     public boolean compare(MVec2 right) {

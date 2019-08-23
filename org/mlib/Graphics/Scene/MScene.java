@@ -16,7 +16,6 @@ public class MScene {
     private Vector<MDrawable> drawables;
     private MContextListener listener;
     private MContextManager manager;
-    private int fps;
 
     public MScene(MDevice device) {
         this.view = new MMat4();
@@ -25,8 +24,6 @@ public class MScene {
 
         this.listener = new MContextListener();
         this.manager = new MContextManager(device, new MRenderer(this.listener));
-
-        setFps(60);
     }
 
     public MScene(MDevice device, ViewGroup group) {
@@ -36,8 +33,6 @@ public class MScene {
 
         this.listener = new MContextListener();
         this.manager = new MContextManager(device, new MRenderer(this.listener), group);
-
-        setFps(60);
     }
 
     public MScene(MDevice device, @IdRes int id) {
@@ -47,8 +42,6 @@ public class MScene {
 
         this.listener = new MContextListener();
         this.manager = new MContextManager(device, new MRenderer(this.listener), id);
-
-        setFps(60);
     }
 
     public void setView(MMat4 view) {
@@ -62,10 +55,6 @@ public class MScene {
     public void setDrawables(MDrawable[] drawables) {
         for (MDrawable drawable : drawables)
             setDrawable(drawable);
-    }
-
-    public void setFps(int fps) {
-        this.fps = fps;
     }
 
     public MMat4 getView() {
@@ -82,10 +71,6 @@ public class MScene {
 
     public MContextManager getManager() {
         return this.manager;
-    }
-
-    public int getFps() {
-        return this.fps;
     }
 
     public void load() {
