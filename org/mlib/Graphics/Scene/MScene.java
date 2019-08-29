@@ -7,6 +7,7 @@ import org.mlib.Graphics.Base.Context.MContextManager;
 import org.mlib.Graphics.Shape.MDrawable;
 import org.mlib.Graphics.Tools.MMat4;
 import org.mlib.System.DeviceService.MDevice;
+import org.mlib.Graphics.Base.Renderer.MRenderer;
 import java.util.Vector;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;

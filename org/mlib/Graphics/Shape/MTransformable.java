@@ -9,7 +9,13 @@ public interface MTransformable {
 
     void scale(MVec2 factor);
 
+    void rotate(float degree);
+
+    void setRotation(float degree);
+
     MVec2 getPosition();
 
     MVec2 getSize();
+
+    float getRotation();
 }

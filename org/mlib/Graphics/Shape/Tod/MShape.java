@@ -21,6 +21,7 @@ public class MShape implements MDrawable, MTransformable {
     private MMat4 model;
     private MShader shader;
     private MVec2 position;
+    private float rotation;
     private MRect rect;
 
     public MShape() {
@@ -32,6 +33,7 @@ public class MShape implements MDrawable, MTransformable {
                 MShaders.main.second
         );
         this.position = new MVec2();
+        this.rotation = 0;
     }
 
     public void setPrimitive(int primitive) {
@@ -128,13 +130,28 @@ public class MShape implements MDrawable, MTransformable {
         this.position.x += offset.x;
         this.position.y += offset.y;
 
-        this.shader.setUniform("matrix", this.model.getComponents());
+        updateMatrix();
     }
 
     @Override
     public void scale(MVec2 factor) {
         this.model.scale(factor);
-        this.shader.setUniform("matrix", this.model.getComponents());
+
+        updateMatrix();
+    }
+
+    @Override
+    public void rotate(float degree) {
+        this.model.rotate(degree);
+
+        updateMatrix();
+    }
+
+    @Override
+    public void setRotation(float degree) {
+        this.model.setRotation(degree);
+
+        updateMatrix();
     }
 
     @Override
@@ -145,6 +162,19 @@ public class MShape implements MDrawable, MTransformable {
     @Override
     public MVec2 getSize() {
         return new MVec2(this.rect.right - this.rect.left,this.rect.bottom - this.rect.top);
+    }
+
+    @Override
+    public float getRotation() {
+        return this.rotation;
+    }
+
+    public MMat4 getModel() {
+        return this.model;
+    }
+
+    private void updateMatrix() {
+        this.shader.setUniform("matrix", this.model.getComponents());
     }
 
     public boolean compare(MShape right) {

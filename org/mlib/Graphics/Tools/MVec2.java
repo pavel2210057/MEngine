@@ -38,6 +38,28 @@ public class MVec2 {
         return (float) Math.sqrt(getLengthSquare());
     }
 
+    public MVec2 getNormal() {
+        return new MVec2(-this.y, this.x);
+    }
+
+    public MVec2 getNormalized() {
+        float length = getLength();
+
+        return new MVec2(
+                x / length,
+                y / length
+        );
+    }
+
+    public MVec2 normalize() {
+        float length = getLength();
+
+        x /= length;
+        y /= length;
+
+        return this;
+    }
+
     public boolean compare(MVec2 right) {
         return
                 this.x == right.x &&

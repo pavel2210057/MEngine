@@ -1,6 +1,8 @@
 package org.mlib.Graphics.Base.Context;
 
+import android.opengl.EGLContext;
 import java.util.Vector;
+import static android.opengl.EGL14.eglGetCurrentContext;
 
 public class MContextListener {
     private Vector<MContextEvent> events;

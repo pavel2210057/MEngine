@@ -1,20 +1,22 @@
 package org.mlib.Tools.Graph;
 
 import android.util.Pair;
+
+import org.mlib.Graphics.Tools.MVec2;
+
 import java.util.Arrays;
 import java.util.Vector;
 
 public class MFunctionGraph {
     private Vector<Pair<Float, Float>> graphData; //коеффициент, степень x
 
-    /*public MFunctionGraph() {
-        this(new Vector<Pair<Float, Float>>());
+    public MFunctionGraph() {
+        this(new Vector<>());
     }
 
+    @SafeVarargs
     public MFunctionGraph(Pair<Float, Float> ...data) {
-        this(
-                new Vector<>(Arrays.asList(data))
-        );
+        this(new Vector<>(Arrays.asList(data)));
     }
 
     public MFunctionGraph(Vector<Pair<Float, Float>> data) {
@@ -23,7 +25,7 @@ public class MFunctionGraph {
 
     public void setEquation(Vector<Pair<Float, Float>> data) {
         this.graphData = data;
-    }*/
+    }
 
     public float getValue(float abscissa) {
         float result = 0;
@@ -45,5 +47,15 @@ public class MFunctionGraph {
             transition.add(getValue(i));
 
         return transition;
+    }
+
+    public static MFunctionGraph fromVector(MVec2 vec2, boolean isNormalized) {
+        if (!isNormalized)
+            vec2 = vec2.getNormalized();
+
+        return new MFunctionGraph(
+                new Pair<>(vec2.x, 1f),
+                new Pair<>(vec2.y, 1f)
+        );
     }
 }

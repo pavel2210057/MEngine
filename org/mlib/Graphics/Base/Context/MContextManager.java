@@ -1,11 +1,10 @@
 package org.mlib.Graphics.Base.Context;
 
+import android.opengl.EGLContext;
 import android.opengl.GLSurfaceView;
 import android.view.ViewGroup;
-
 import androidx.annotation.IdRes;
-
-import org.mlib.Graphics.Scene.MRenderer;
+import org.mlib.Graphics.Base.Renderer.MRenderer;
 import org.mlib.System.DeviceService.MDevice;
 import org.mlib.System.Exception.MException;
 

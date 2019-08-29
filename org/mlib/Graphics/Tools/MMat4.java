@@ -21,6 +21,14 @@ public class MMat4 {
         Matrix.scaleM(this.components, 0, factor.x, factor.y, 1);
     }
 
+    public void rotate(float degree) {
+        Matrix.rotateM(this.components, 0, degree, 0, 0, 1);
+    }
+
+    public void setRotation(float degree) {
+        Matrix.setRotateM(this.components, 0, degree, 0, 0, 1);
+    }
+
     public void mul(MMat4 right) {
         Matrix.multiplyMM(this.components, 0, this.components, 0, right.getComponents(), 0);
     }
