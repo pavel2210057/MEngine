@@ -8,7 +8,7 @@ public class MColor {
     public static MColor Violet = new MColor(1, 0, 1, 1);
     public static MColor LightBlue = new MColor(0, 1, 1, 1);
 
-    public float r, g, b, a;
+    public Float r, g, b, a;
 
     public MColor() {
         this(0, 0, 0, 1);

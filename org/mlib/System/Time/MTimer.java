@@ -5,7 +5,7 @@ public class MTimer {
     private long mills;
 
     public MTimer() {
-        this.begin = System.currentTimeMillis();
+        restart();
     }
 
     public double getSeconds() {
@@ -14,5 +14,17 @@ public class MTimer {
 
     public long getMills() {
         return (this.mills = System.currentTimeMillis() - this.begin);
+    }
+
+    public void restart() {
+        this.begin = System.currentTimeMillis();
+    }
+
+    public static void waiting(long mills) {
+        final long begin = System.currentTimeMillis();
+        long current = begin;
+
+        while (current - begin <= mills)
+            current = System.currentTimeMillis();
     }
 }

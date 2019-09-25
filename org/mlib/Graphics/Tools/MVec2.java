@@ -60,6 +60,10 @@ public class MVec2 {
         return this;
     }
 
+    public float getDotProduct(MVec2 right) {
+        return this.x * right.x + this.y * right.y;
+    }
+
     public boolean compare(MVec2 right) {
         return
                 this.x == right.x &&

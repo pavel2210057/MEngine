@@ -23,6 +23,6 @@ public class MFloatBuffer {
     }
 
     public static FloatBuffer create(float[] data) {
-        return create(data.length * 4).put(data);
+        return FloatBuffer.wrap(data);
     }
 }

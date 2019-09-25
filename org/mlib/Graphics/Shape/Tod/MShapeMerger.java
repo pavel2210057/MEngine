@@ -1,6 +1,7 @@
 package org.mlib.Graphics.Shape.Tod;
 
 import android.util.Pair;
+import org.mlib.Graphics.Scene.MScene;
 import java.util.HashMap;
 
 public class MShapeMerger extends MShape {
@@ -8,6 +9,11 @@ public class MShapeMerger extends MShape {
 
     public MShapeMerger() {
         this.drawBuffer = new HashMap<>();
+    }
+
+    public MShapeMerger(MScene scene) {
+        this.drawBuffer = new HashMap<>();
+        super.update(scene.getView());
     }
 
     public MShapeMerger(MShape[] shapes) {

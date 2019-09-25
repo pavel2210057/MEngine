@@ -1,5 +1,6 @@
 package org.mlib.Graphics.Shape.Tod;
 
+import org.mlib.Graphics.Scene.MScene;
 import org.mlib.Graphics.Texture.MTexture;
 import org.mlib.Graphics.Tools.MRect;
 import org.mlib.Graphics.Tools.MVec2;
@@ -8,7 +9,14 @@ public class MSprite extends MRectangle {
     private MTexture texture;
     private MRect textureRect;
 
-    public MSprite() {
+    public MSprite(MVec2 size) {
+        super(size);
+        this.texture = new MTexture();
+        this.textureRect = new MRect();
+    }
+
+    public MSprite(MVec2 size, MScene scene) {
+        super(size, scene);
         this.texture = new MTexture();
         this.textureRect = new MRect();
     }
@@ -23,11 +31,14 @@ public class MSprite extends MRectangle {
         this.textureRect = textureRect;
 
         getVertices().get(0).texCoord = new MVec2(textureRect.left, textureRect.top);
-        getVertices().get(1).texCoord = new MVec2(textureRect.left, textureRect.bottom);
-        getVertices().get(2).texCoord = new MVec2(textureRect.right, textureRect.top);
-        getVertices().get(3).texCoord = new MVec2(textureRect.left, textureRect.bottom);
-        getVertices().get(4).texCoord = new MVec2(textureRect.right, textureRect.top);
-        getVertices().get(5).texCoord = new MVec2(textureRect.right, textureRect.bottom);
+        getVertices().get(1).texCoord = new MVec2(textureRect.left, textureRect.top + textureRect.bottom);
+        getVertices().get(2).texCoord = new MVec2(textureRect.left + textureRect.right, textureRect.top);
+        getVertices().get(3).texCoord = new MVec2(textureRect.left, textureRect.top + textureRect.bottom);
+        getVertices().get(4).texCoord = new MVec2(textureRect.left + textureRect.right, textureRect.top);
+        getVertices().get(5).texCoord = new MVec2(textureRect.left + textureRect.right, textureRect.top + textureRect.bottom);
+
+        if (isLoaded())
+            updateTexCoord();
     }
 
     public MTexture getTexture() {

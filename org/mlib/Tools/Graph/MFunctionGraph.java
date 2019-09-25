@@ -1,9 +1,7 @@
 package org.mlib.Tools.Graph;
 
 import android.util.Pair;
-
 import org.mlib.Graphics.Tools.MVec2;
-
 import java.util.Arrays;
 import java.util.Vector;
 

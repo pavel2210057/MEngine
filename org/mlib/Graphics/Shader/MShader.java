@@ -1,12 +1,17 @@
 package org.mlib.Graphics.Shader;
 
 import android.util.Pair;
+import android.util.SparseArray;
+
+import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import org.mlib.System.DeviceService.MDevice;
 import org.mlib.System.Exception.MException;
 import org.mlib.System.File.MFile;
 import org.mlib.System.File.MRawReader;
 import java.nio.FloatBuffer;
+import java.util.HashMap;
+
 import static android.opengl.GLES20.GL_VERTEX_SHADER;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
 import static android.opengl.GLES20.glDeleteProgram;
@@ -20,12 +25,14 @@ public class MShader {
     private int vertex, fragment, program;
     private MUniformArray uniformArray;
     private MBufferArray bufferArray;
+    private HashMap<String, Integer> cachedVars;
     private boolean isCompiled;
 
     public MShader() {
         this.isCompiled = false;
         this.uniformArray = new MUniformArray();
         this.bufferArray = new MBufferArray();
+        this.cachedVars = new HashMap<>();
     }
 
     public MShader(String source, int type) {
@@ -88,13 +95,27 @@ public class MShader {
 
     public void setUniform(String name, float[] values) {
         compile();
-        int uniform = glGetUniformLocation(this.program, name);
+
+        Integer uniform;
+        if ((uniform = getVarFromCache(name)) == null)
+            this.cachedVars.put(
+                    name,
+                    uniform = glGetUniformLocation(this.program, name)
+            );
+
         this.uniformArray.setUniform(uniform, values);
     }
 
     public void setAttribute(String name, FloatBuffer values, int size) {
         compile();
-        int attribute = glGetAttribLocation(this.program, name);
+
+        Integer attribute;
+        if ((attribute = getVarFromCache(name)) == null)
+            this.cachedVars.put(
+                    name,
+                    attribute = glGetAttribLocation(this.program, name)
+            );
+
         this.bufferArray.addAttribute(attribute, values, size, 0);
     }
 
@@ -126,6 +147,14 @@ public class MShader {
         return this.uniformArray;
     }
 
+    public HashMap<String, Integer> getCachedVars() {
+        return this.cachedVars;
+    }
+
+    public Integer getVarFromCache(String name) {
+        return this.cachedVars.get(name);
+    }
+
     public void apply() {
         glUseProgram(this.program);
 
@@ -150,7 +179,7 @@ public class MShader {
         glDeleteProgram(this.program);
     }
 
-    public void compile() {
+    private void compile() {
         if (!this.isCompiled) {
             if (this.vertexSource.length() == 0 || this.fragmentSource.length() == 0)
                 new MException("Недостаточно данных для компиляции шейдера").printStackTrace();

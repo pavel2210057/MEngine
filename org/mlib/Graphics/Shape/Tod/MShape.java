@@ -1,6 +1,7 @@
 package org.mlib.Graphics.Shape.Tod;
 
 import org.mlib.Graphics.Base.Vertex.MVertex2;
+import org.mlib.Graphics.Scene.MScene;
 import org.mlib.Graphics.Shader.MShader;
 import org.mlib.Graphics.Shader.Shaders.MShaders;
 import org.mlib.Graphics.Shape.MDrawable;
@@ -23,6 +24,7 @@ public class MShape implements MDrawable, MTransformable {
     private MVec2 position;
     private float rotation;
     private MRect rect;
+    private boolean isLoaded;
 
     public MShape() {
         this.primitive = GL_POINTS;
@@ -34,6 +36,12 @@ public class MShape implements MDrawable, MTransformable {
         );
         this.position = new MVec2();
         this.rotation = 0;
+        this.isLoaded = false;
+    }
+
+    public MShape(MScene scene) {
+        this();
+        scene.setDrawable(this);
     }
 
     public void setPrimitive(int primitive) {
@@ -58,6 +66,7 @@ public class MShape implements MDrawable, MTransformable {
         for (MVertex2 vertex : this.vertices)
             vertex.color = color;
         calculateRect();
+        updateColor();
     }
 
     public void removeVertex(int index) {
@@ -85,6 +94,10 @@ public class MShape implements MDrawable, MTransformable {
         return this.rect;
     }
 
+    public boolean isLoaded() {
+        return this.isLoaded;
+    }
+
     @Override
     public void update(MMat4 view) {
         this.model.identity(0);
@@ -110,6 +123,41 @@ public class MShape implements MDrawable, MTransformable {
         this.shader.setAttribute("iVertex", position, 2);
         this.shader.setAttribute("iColor", color, 4);
         this.shader.setAttribute("iTexCoord", texCoord, 2);
+
+        this.isLoaded = true;
+    }
+
+    protected void updatePosition() {
+        FloatBuffer position = MFloatBuffer.create(this.vertices.size() * 8);
+
+        for (MVertex2 vertex : this.vertices)
+            position.put(new float[] { vertex.position.x, vertex.position.y });
+
+        position.position(0);
+
+        this.shader.setAttribute("iVertex", position, 2);
+    }
+
+    protected void updateColor() {
+        FloatBuffer color = MFloatBuffer.create(this.vertices.size() * 16);
+
+        for (MVertex2 vertex : this.vertices)
+            color.put(new float[] { vertex.color.r, vertex.color.g, vertex.color.b, vertex.color.a });
+
+        color.position(0);
+
+        this.shader.setAttribute("iColor", color, 4);
+    }
+
+    protected void updateTexCoord() {
+        FloatBuffer texCoord = MFloatBuffer.create(this.vertices.size() * 8);
+
+        for (MVertex2 vertex : this.vertices)
+            texCoord.put(new float[] { vertex.texCoord.x, vertex.texCoord.y });
+
+        texCoord.position(0);
+
+        this.shader.setAttribute("iTexCoord", texCoord, 2);
     }
 
     @Override
@@ -129,29 +177,21 @@ public class MShape implements MDrawable, MTransformable {
 
         this.position.x += offset.x;
         this.position.y += offset.y;
-
-        updateMatrix();
     }
 
     @Override
     public void scale(MVec2 factor) {
         this.model.scale(factor);
-
-        updateMatrix();
     }
 
     @Override
     public void rotate(float degree) {
         this.model.rotate(degree);
-
-        updateMatrix();
     }
 
     @Override
     public void setRotation(float degree) {
         this.model.setRotation(degree);
-
-        updateMatrix();
     }
 
     @Override
@@ -173,14 +213,20 @@ public class MShape implements MDrawable, MTransformable {
         return this.model;
     }
 
-    private void updateMatrix() {
-        this.shader.setUniform("matrix", this.model.getComponents());
-    }
-
     public boolean compare(MShape right) {
         return
                 this.primitive == right.getPrimitive() &&
                 this.shader.getProgram() == right.getShader().getProgram();
+    }
+
+    protected void updateRectPosition(MVec2 position) {
+        this.rect.left = position.x;
+        this.rect.top = position.y;
+    }
+
+    protected void updateRectSize(MVec2 size) {
+        this.rect.right = size.x;
+        this.rect.bottom = size.y;
     }
 
     protected void calculateRect() {
