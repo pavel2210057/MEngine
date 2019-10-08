@@ -4,6 +4,9 @@ import android.app.Service;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.mlib.System.DeviceService.MDevice;
 import org.mlib.System.Exception.MException;
 

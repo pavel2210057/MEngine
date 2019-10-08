@@ -11,8 +11,7 @@ public class MShaders {
                             "varying vec4 oColor;" +
                             "varying vec4 oTexCoord;" +
                             "uniform mat4 iMatrix;" +
-                            "void main()" +
-                            "{" +
+                            "void main() {" +
                             "gl_Position = iMatrix * iVertex;" +
                             "oColor = iColor;" +
                             "oTexCoord = iTexCoord;" +
@@ -22,8 +21,7 @@ public class MShaders {
                             "varying vec4 oColor;" +
                             "varying vec4 oTexCoord;" +
                             "uniform sampler2D iTexture;" +
-                            "void main()" +
-                            "{" +
+                            "void main() {" +
                             "gl_FragColor = texture2D(iTexture, vec2(oTexCoord.x, oTexCoord.y)) + oColor;" +
                             "}"
             );

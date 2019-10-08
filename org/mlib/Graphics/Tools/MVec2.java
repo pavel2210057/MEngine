@@ -64,6 +64,25 @@ public class MVec2 {
         return this.x * right.x + this.y * right.y;
     }
 
+    public MVec2 getInverse() {
+        return new MVec2(-this.x, -this.y);
+    }
+
+    public void inverse() {
+        this.x = -this.x;
+        this.y = -this.y;
+    }
+
+    public void translate(MVec2 offset) {
+        this.x += offset.x;
+        this.y += offset.y;
+    }
+
+    public void scale(MVec2 factor) {
+        this.x *= factor.x;
+        this.y *= factor.y;
+    }
+
     public boolean compare(MVec2 right) {
         return
                 this.x == right.x &&

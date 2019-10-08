@@ -10,21 +10,9 @@ import org.mlib.Graphics.Tools.MMat4;
 import org.mlib.System.DeviceService.MDevice;
 import org.mlib.Graphics.Base.Renderer.MRenderer;
 import java.util.Vector;
-
-import static android.opengl.GLES20.GL_BACK;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
-import static android.opengl.GLES20.GL_CULL_FACE;
-import static android.opengl.GLES20.GL_CW;
-import static android.opengl.GLES20.GL_DEPTH_ATTACHMENT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
-import static android.opengl.GLES20.GL_DEPTH_TEST;
-import static android.opengl.GLES20.GL_FRONT;
-import static android.opengl.GLES20.GL_LEQUAL;
 import static android.opengl.GLES20.glClear;
-import static android.opengl.GLES20.glCullFace;
-import static android.opengl.GLES20.glDepthFunc;
-import static android.opengl.GLES20.glEnable;
-import static android.opengl.GLES20.glFrontFace;
 
 public class MScene {
     private MMat4 view;

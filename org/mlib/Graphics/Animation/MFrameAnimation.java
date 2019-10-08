@@ -78,8 +78,6 @@ public class MFrameAnimation implements MAnimation {
                         data.add(frame.top);
                         data.add(frame.right);
                         data.add(frame.bottom);
-                        data.add(frame.center.x);
-                        data.add(frame.center.y);
 
                         listener.onStep(data);
 

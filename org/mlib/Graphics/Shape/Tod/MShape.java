@@ -34,6 +34,7 @@ public class MShape implements MDrawable, MTransformable {
                 MShaders.main.first,
                 MShaders.main.second
         );
+        this.rect = new MRect();
         this.position = new MVec2();
         this.rotation = 0;
         this.isLoaded = false;
@@ -56,6 +57,20 @@ public class MShape implements MDrawable, MTransformable {
     public void setVertex(MVertex2 vertex, int index) {
         this.vertices.add(index, vertex);
         calculateRect();
+    }
+
+    public void setVertexCount(int count) {
+        if (count < this.vertices.size()) {
+            this.vertices.setSize(count);
+        } else if (count > this.vertices.size()) {
+
+            Vector<MVertex2> vertices = new Vector<>();
+
+            for (int i = 0; i < count - this.vertices.size(); ++i)
+                vertices.add(new MVertex2());
+
+            setVertices(vertices);
+        }
     }
 
     public void setVertices(Vector<MVertex2> vertices) {
